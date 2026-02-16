@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EASY LIFE TOOL - Free Online Text Tools</title>
+
+<meta name="description" content="EASY LIFE TOOL provides free online tools like Word Counter, Text Case Converter, Remove Extra Spaces, Line Counter, Text Reverser and more. Simple and user-friendly.">
+<meta name="keywords" content="word counter, text tools, line counter, remove extra spaces, text converter, free online tools">
+<meta name="author" content="Easy Life Tool">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{
+background:linear-gradient(135deg,#4facfe,#00f2fe);
+min-height:100vh;
+color:#333;
+}
+
+header{
+text-align:center;
+padding:20px;
+color:#fff;
+}
+
+header h1{
+font-size:32px;
+font-weight:700;
+}
+
+.tools-container{
+max-width:1100px;
+margin:30px auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:#fff;
+border-radius:15px;
+padding:20px;
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+transition:0.3s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 12px 25px rgba(0,0,0,0.25);
+}
+
+.card h3{
+margin-bottom:10px;
+color:#0077ff;
+}
+
+.card p{
+font-size:14px;
+margin-bottom:15px;
+}
+
+.card button{
+background:#0077ff;
+border:none;
+color:#fff;
+padding:8px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.card button:hover{
+background:#005ad1;
+}
+
+/* Modal */
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:1000;
+}
+
+.modal-content{
+background:#0e1a2b;
+color:#fff;
+width:100%;
+max-width:800px;
+border-radius:15px;
+padding:20px;
+position:relative;
+}
+
+.close{
+position:absolute;
+right:20px;
+top:15px;
+cursor:pointer;
+font-size:18px;
+}
+
+textarea{
+width:100%;
+height:200px;
+margin-top:15px;
+border-radius:10px;
+border:none;
+padding:15px;
+resize:none;
+font-size:14px;
+}
+
+.result{
+margin-top:15px;
+font-size:14px;
+}
+
+.tool-buttons{
+margin-top:10px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.tool-buttons button{
+background:#00c6ff;
+border:none;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+color:#000;
+font-weight:600;
+}
+
+footer{
+text-align:center;
+padding:20px;
+color:#fff;
+font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>EASY LIFE TOOL</h1>
+<p>Free Online Smart Text Tools</p>
+</header>
+
+<div class="tools-container">
+
+<div class="card" onclick="openTool('case')">
+<h3>Text Case Converter</h3>
+<p>Uppercase, Lowercase, Title Case, Sentence Case.</p>
+<button>Open</button>
+</div>
+
+<div class="card" onclick="openTool('word')">
+<h3>Word Counter</h3>
+<p>Count words, characters, lines & reading time.</p>
+<button>Open</button>
+</div>
+
+<div class="card" onclick="openTool('space')">
+<h3>Remove Extra Spaces</h3>
+<p>Trim and clean formatting.</p>
+<button>Open</button>
+</div>
+
+<div class="card" onclick="openTool('character')">
+<h3>Character Counter</h3>
+<p>Total + without spaces.</p>
+<button>Open</button>
+</div>
+
+<div class="card" onclick="openTool('reverse')">
+<h3>Text Reverser</h3>
+<p>Reverse text or words.</p>
+<button>Open</button>
+</div>
+
+<div class="card" onclick="openTool('find')">
+<h3>Find & Replace</h3>
+<p>Search and replace words.</p>
+<button>Open</button>
+</div>
+
+<div class="card" onclick="openTool('line')">
+<h3>Line Counter</h3>
+<p>Count lines instantly.</p>
+<button>Open</button>
+</div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">Close ✖</span>
+<h2 id="toolTitle"></h2>
+<textarea id="textInput" placeholder="Enter your text here..."></textarea>
+<div class="tool-buttons" id="toolActions"></div>
+<div class="result" id="result"></div>
+</div>
+</div>
+
+<footer>
+© 2026 EASY LIFE TOOL | Designed for Productivity
+</footer>
+
+<script>
+
+function openTool(tool){
+document.getElementById("modal").style.display="flex";
+let title=document.getElementById("toolTitle");
+let actions=document.getElementById("toolActions");
+let result=document.getElementById("result");
+result.innerHTML="";
+actions.innerHTML="";
+document.getElementById("textInput").value="";
+
+if(tool==="case"){
+title.innerText="Text Case Converter";
+actions.innerHTML=`
+<button onclick="toUpper()">UPPERCASE</button>
+<button onclick="toLower()">lowercase</button>
+<button onclick="toTitle()">Title Case</button>
+`;
+}
+else if(tool==="word"){
+title.innerText="Word Counter";
+actions.innerHTML=`<button onclick="countWords()">Count</button>`;
+}
+else if(tool==="space"){
+title.innerText="Remove Extra Spaces";
+actions.innerHTML=`<button onclick="removeSpaces()">Clean</button>`;
+}
+else if(tool==="character"){
+title.innerText="Character Counter";
+actions.innerHTML=`<button onclick="countCharacters()">Count</button>`;
+}
+else if(tool==="reverse"){
+title.innerText="Text Reverser";
+actions.innerHTML=`
+<button onclick="reverseText()">Reverse Text</button>
+<button onclick="reverseWords()">Reverse Words</button>`;
+}
+else if(tool==="find"){
+title.innerText="Find & Replace";
+actions.innerHTML=`
+<input id="findText" placeholder="Find">
+<input id="replaceText" placeholder="Replace">
+<button onclick="findReplace()">Replace</button>`;
+}
+else if(tool==="line"){
+title.innerText="Line Counter";
+actions.innerHTML=`<button onclick="countLines()">Count</button>`;
+}
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
+
+function getText(){
+return document.getElementById("textInput").value;
+}
+
+function setText(val){
+document.getElementById("textInput").value=val;
+}
+
+/* Tool Functions */
+
+function toUpper(){ setText(getText().toUpperCase()); }
+function toLower(){ setText(getText().toLowerCase()); }
+function toTitle(){
+setText(getText().toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()));
+}
+
+function countWords(){
+let text=getText();
+let words=text.trim().split(/\s+/).filter(w=>w.length>0).length;
+let chars=text.length;
+let lines=text.split("\n").length;
+let reading=Math.ceil(words/200);
+document.getElementById("result").innerHTML=
+`Words: ${words} | Characters: ${chars} | Lines: ${lines} | Reading Time: ${reading} min`;
+}
+
+function removeSpaces(){
+setText(getText().replace(/\s+/g,' ').trim());
+}
+
+function countCharacters(){
+let text=getText();
+document.getElementById("result").innerHTML=
+`Total Characters: ${text.length} | Without Spaces: ${text.replace(/\s/g,'').length}`;
+}
+
+function reverseText(){
+setText(getText().split("").reverse().join(""));
+}
+
+function reverseWords(){
+setText(getText().split(" ").reverse().join(" "));
+}
+
+function findReplace(){
+let find=document.getElementById("findText").value;
+let replace=document.getElementById("replaceText").value;
+let regex=new RegExp(find,"g");
+setText(getText().replace(regex,replace));
+}
+
+function countLines(){
+let lines=getText().split("\n").length;
+document.getElementById("result").innerHTML=`Total Lines: ${lines}`;
+}
+
+</script>
+
+</body>
+</html>
